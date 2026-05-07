@@ -22,7 +22,7 @@ export const sendWaitlistConfirmation = async (
         <h1 style="color: #4F46E5;">Welcome, ${name}!</h1>
         <p style="font-size: 16px; color: #374151;">
           Thank you for joining our waitlist. We're thrilled to have you on board!
-          Thanks for showing interestin our product.
+          Thanks for showing interest in our product.
         </p>
         ${message ? `<p style="font-size: 14px; color: #6B7280; background: #F3F4F6; padding: 12px; border-radius: 8px;"><strong>Your message:</strong> ${message}</p>` : ''}
         <p style="font-size: 14px; color: #6B7280;">
