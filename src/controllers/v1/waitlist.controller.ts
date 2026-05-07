@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
-import { Waitlist } from '../entities/waitlist.entity.js';
-import { sendWaitlistConfirmation } from '../services/email.service.js';
-import { formatResponse } from '../utils/responseHelper.js';
+import { Waitlist } from '../../entities/waitlist.entity.js';
+import { sendWaitlistConfirmation } from '../../services/v1/email.service.js';
+import { formatResponse } from '../../utils/responseHelper.js';
 
 export const createWaitlistEntry = async (req: Request, res: Response) => {
   try {
@@ -12,15 +12,15 @@ export const createWaitlistEntry = async (req: Request, res: Response) => {
 
     try {
       await sendWaitlistConfirmation(name, email, message);
-      console.log(`Confirmation email sent to ${email}`);
+      console.log(`V1: Confirmation email sent to ${email}`);
     } catch (emailError: any) {
-      console.error('Failed to send email:', emailError.message);
+      console.error('V1: Failed to send email:', emailError.message);
     }
 
     res.status(201).json(formatResponse(true, 'Successfully joined the waitlist!', newUser));
   } catch (error: any) {
     if (error.code === 11000) {
-      return res.status(400).json(formatResponse(false, 'Email already exists'));
+      return res.status(400).json(formatResponse(false, 'Already joined the waitlist with this email'));
     }
     res.status(500).json(formatResponse(false, error.message));
   }

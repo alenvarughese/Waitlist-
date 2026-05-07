@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { createWaitlistEntry, getWaitlistEntries } from '../../controllers/v1/waitlist.controller.js';
+import { createWaitlistEntry, getWaitlistEntries } from '../../controllers/v2/waitlist.controller.js';
 import { validateWaitlistInput } from '../../validations/waitlist.validation.js';
 
 const router = Router();
