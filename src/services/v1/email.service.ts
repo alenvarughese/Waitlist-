@@ -1,13 +1,18 @@
 import nodemailer from 'nodemailer';
 
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+let transporter: any;
+
+const getTransporter = () => {
+  if (!transporter) {
+    transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
+      },
+    });
+  }
+  return transporter;
 };
 
 const getV1Template = (name: string, message?: string): string => `
@@ -36,8 +41,8 @@ const sendEmail = async (
   subject: string,
   html: string
 ) => {
-  const transporter = createTransporter();
-  await transporter.sendMail({
+  const mailTransporter = getTransporter();
+  await mailTransporter.sendMail({
     from: `"Waitlist" <${process.env.EMAIL_USER}>`,
     to: email,
     subject,

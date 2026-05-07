@@ -10,14 +10,12 @@ export const createWaitlistEntry = async (req: Request, res: Response) => {
     const newUser = new Waitlist({ name, email, message });
     await newUser.save();
 
-    try {
-      await sendWaitlistConfirmation(name, email, message);
-      console.log(`V2: Confirmation email sent to ${email}`);
-    } catch (emailError: any) {
-      console.error('V2: Failed to send email:', emailError.message);
-    }
+    // Fire-and-forget email (non-blocking)
+    sendWaitlistConfirmation(name, email, message)
+      .then(() => console.log(`V2: Confirmation email sent to ${email}`))
+      .catch((emailError: any) => console.error('V2: Failed to send email:', emailError.message));
 
-    res.status(201).json(formatResponse(true, 'Successfully joined the waitlist!', newUser));
+    return res.status(201).json(formatResponse(true, 'Successfully joined the waitlist!', newUser));
   } catch (error: any) {
     if (error.code === 11000) {
       return res.status(400).json(formatResponse(false, 'Already joined the waitlist with this email'));
